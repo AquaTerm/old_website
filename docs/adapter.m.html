@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML>
+<HEAD>
+<TITLE>Enscript Output</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#1F00FF" ALINK="#FF0000" VLINK="#9900DD">
+<A NAME="top">
+<A NAME="file1">
+<H1>adapter.m</H1>
+
+<PRE>
+#<B><FONT COLOR="#5F9EA0">import</FONT></B> &lt;<FONT COLOR="#B8860B">Foundation</FONT>/<FONT COLOR="#B8860B">Foundation</FONT>.<FONT COLOR="#B8860B">h</FONT>&gt;
+#<B><FONT COLOR="#5F9EA0">import</FONT></B> &lt;<FONT COLOR="#B8860B">AppKit</FONT>/<FONT COLOR="#B8860B">AppKit</FONT>.<FONT COLOR="#B8860B">h</FONT>&gt;
+#<B><FONT COLOR="#5F9EA0">import</FONT></B> <FONT COLOR="#BC8F8F"><B>&quot;AQTProtocol.h&quot;</FONT></B>
+#<B><FONT COLOR="#5F9EA0">include</FONT></B> <FONT COLOR="#BC8F8F"><B>&quot;C_API.h&quot;</FONT></B>
+<I><FONT COLOR="#B22222">// 
+</FONT></I><I><FONT COLOR="#B22222">// 
+</FONT></I><FONT COLOR="#228B22"><B>static</FONT></B> NSAutoreleasePool *arpool; <I><FONT COLOR="#B22222">// Objective-C autorelease pool  
+</FONT></I><FONT COLOR="#228B22"><B>static</FONT></B> <B><FONT COLOR="#A020F0">id</FONT></B> adapter;        				<I><FONT COLOR="#B22222">// Adapter object 
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">// --- Objective-C Adapter for AquaTerm 
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// First we need some Cocoa magic incantations, documented at:
+</FONT></I><I><FONT COLOR="#B22222">// http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
+</FONT></I><I><FONT COLOR="#B22222">// Look under &quot;Making Substitutions During Message Encoding&quot;
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// The class NSBezierPath doesn't implement replacementObjectForPortCoder so
+</FONT></I><I><FONT COLOR="#B22222">// we add that behaviour as a category for NSBezierPath
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I>@<B><FONT COLOR="#A020F0">interface</FONT></B> <B><FONT COLOR="#0000FF">NSBezierPath</FONT></B> (<B><FONT COLOR="#0000FF">NSBezierPathDOCategory</FONT></B>)
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">replacementObjectForPortCoder</FONT></B>:(<FONT COLOR="#228B22"><B>NSPortCoder *</FONT></B>)<FONT COLOR="#B8860B">portCoder</FONT>;
+@<B><FONT COLOR="#A020F0">end</FONT></B>
+
+@<B><FONT COLOR="#A020F0">implementation</FONT></B> <B><FONT COLOR="#0000FF">NSBezierPath</FONT></B> (<B><FONT COLOR="#0000FF">NSBezierPathDOCategory</FONT></B>)
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">replacementObjectForPortCoder</FONT></B>:(<FONT COLOR="#228B22"><B>NSPortCoder *</FONT></B>)<FONT COLOR="#B8860B">portCoder</FONT>
+{
+  <B><FONT COLOR="#A020F0">if</FONT></B> ([portCoder isBycopy])
+    <B><FONT COLOR="#A020F0">return</FONT></B> <B><FONT COLOR="#A020F0">self</FONT></B>;
+  <B><FONT COLOR="#A020F0">return</FONT></B> [<B><FONT COLOR="#A020F0">super</FONT></B> replacementObjectForPortCoder:portCoder];
+}
+@<B><FONT COLOR="#A020F0">end</FONT></B>
+<I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">// --- AQTAdapter - A class to mediate between C-function calls
+</FONT></I><I><FONT COLOR="#B22222">// --- and AquaTerm Objective-C remote messages
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I>@<B><FONT COLOR="#A020F0">interface</FONT></B> <B><FONT COLOR="#0000FF">AQTAdapter</FONT></B> : <B><FONT COLOR="#0000FF">NSObject</FONT></B>
+{
+  @<B><FONT COLOR="#A020F0">private</FONT></B>
+  <B><FONT COLOR="#A020F0">id</FONT></B> aqtConnection;
+}
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">init</FONT></B>;									// init &amp; dealloc are listed for completeness
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">dealloc</FONT></B>;
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">aqtConnection</FONT></B>;				// accessor method
+- (<FONT COLOR="#228B22"><B>BOOL</FONT></B>)<B><FONT COLOR="#0000FF">connectToAquaTerm</FONT></B>;	// convenience method
+<I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// Obj-C methods implementing the functionality defined in C_API.h
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I>- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">openGraph</FONT></B>:(<FONT COLOR="#228B22"><B>int</FONT></B>)<FONT COLOR="#B8860B">n</FONT>;
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">closeGraph</FONT></B>;
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">lineFromPoint</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">startpoint</FONT> <B><FONT COLOR="#0000FF">toPoint</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">endpoint</FONT>;
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">putText</FONT></B>:(<FONT COLOR="#228B22"><B>const char *</FONT></B>)<FONT COLOR="#B8860B">str</FONT> <B><FONT COLOR="#0000FF">at</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">point</FONT>;
+@<B><FONT COLOR="#A020F0">end</FONT></B> 
+
+@<B><FONT COLOR="#A020F0">implementation</FONT></B> <B><FONT COLOR="#0000FF">AQTAdapter</FONT></B>
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">init</FONT></B>
+{
+  <B><FONT COLOR="#A020F0">if</FONT></B> (<B><FONT COLOR="#A020F0">self</FONT></B> = [<B><FONT COLOR="#A020F0">super</FONT></B> init])
+  {	
+    <I><FONT COLOR="#B22222">//
+</FONT></I>    <I><FONT COLOR="#B22222">// Try to get a local proxy of the object in AquaTerm that manages communication
+</FONT></I>    <I><FONT COLOR="#B22222">// 
+</FONT></I>    <B><FONT COLOR="#A020F0">if</FONT></B> ([<B><FONT COLOR="#A020F0">self</FONT></B> connectToAquaTerm])
+    {
+      <I><FONT COLOR="#B22222">// 
+</FONT></I>      <I><FONT COLOR="#B22222">// This speeds up communication with the remote object, see
+</FONT></I>      <I><FONT COLOR="#B22222">// http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
+</FONT></I>      <I><FONT COLOR="#B22222">// Look under &quot;Connections and Proxies&quot;
+</FONT></I>      <I><FONT COLOR="#B22222">//
+</FONT></I>      [aqtConnection setProtocolForProxy:@<B><FONT COLOR="#A020F0">protocol</FONT></B>(<B><FONT COLOR="#0000FF">AQTProtocol</FONT></B>)];
+    }
+  }
+  <B><FONT COLOR="#A020F0">return</FONT></B> <B><FONT COLOR="#A020F0">self</FONT></B>;
+}
+
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">dealloc</FONT></B>
+{
+  [aqtConnection release];
+  [<B><FONT COLOR="#A020F0">super</FONT></B> dealloc];
+}
+
+- (<FONT COLOR="#228B22"><B>id</FONT></B>)<B><FONT COLOR="#0000FF">aqtConnection</FONT></B>
+{
+  <B><FONT COLOR="#A020F0">return</FONT></B> aqtConnection;
+}
+
+- (<FONT COLOR="#228B22"><B>BOOL</FONT></B>)<B><FONT COLOR="#0000FF">connectToAquaTerm</FONT></B>
+{
+  <B><FONT COLOR="#A020F0">BOOL</FONT></B> didConnect = <B><FONT COLOR="#A020F0">NO</FONT></B>;
+  <I><FONT COLOR="#B22222">//
+</FONT></I>  <I><FONT COLOR="#B22222">// Establish a connection to AquaTerm.
+</FONT></I>  <I><FONT COLOR="#B22222">// First check if AquaTerm is already running, otherwise
+</FONT></I>  <I><FONT COLOR="#B22222">// try to launch AquaTerm from standard locations.
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  aqtConnection = [NSConnection rootProxyForConnectionWithRegisteredName:@<FONT COLOR="#BC8F8F"><B>&quot;aquatermServer&quot;</FONT></B> host:<B><FONT COLOR="#A020F0">nil</FONT></B>];
+  <B><FONT COLOR="#A020F0">if</FONT></B> (aqtConnection) <I><FONT COLOR="#B22222">/* Server is running and ready to go */</FONT></I>
+  {
+    [aqtConnection retain];
+    didConnect = <B><FONT COLOR="#A020F0">YES</FONT></B>;
+  }
+  <B><FONT COLOR="#A020F0">else</FONT></B> <I><FONT COLOR="#B22222">/* Server isn't running, we must fire it up */</FONT></I>
+  {
+    <I><FONT COLOR="#B22222">//
+</FONT></I>    <I><FONT COLOR="#B22222">// Try to launch AquaTerm
+</FONT></I>    <I><FONT COLOR="#B22222">//
+</FONT></I>    <B><FONT COLOR="#A020F0">if</FONT></B> ([[NSWorkspace sharedWorkspace] launchApplication:@<FONT COLOR="#BC8F8F"><B>&quot;AquaTerm&quot;</FONT></B>] == <B><FONT COLOR="#A020F0">NO</FONT></B>)
+    {
+      printf(<FONT COLOR="#BC8F8F"><B>&quot;Failed to launch AquaTerm.\n&quot;</FONT></B>);
+      printf(<FONT COLOR="#BC8F8F"><B>&quot;You must either put AquaTerm.app in \n&quot;</FONT></B>);
+      printf(<FONT COLOR="#BC8F8F"><B>&quot;the /Applications or ~/Applications folder\n&quot;</FONT></B>);
+    }
+    <B><FONT COLOR="#A020F0">else</FONT></B>
+    {
+      <B><FONT COLOR="#A020F0">do</FONT></B> { <I><FONT COLOR="#B22222">/* Wait for it to register with OS */</FONT></I>
+        aqtConnection =[NSConnection rootProxyForConnectionWithRegisteredName:@<FONT COLOR="#BC8F8F"><B>&quot;aquatermServer&quot;</FONT></B> host:<B><FONT COLOR="#A020F0">nil</FONT></B>];
+      } <B><FONT COLOR="#A020F0">while</FONT></B> (!aqtConnection);  <I><FONT COLOR="#B22222">/* This could result in a hang if something goes wrong with registering! */</FONT></I>
+      [aqtConnection retain];
+      didConnect = <B><FONT COLOR="#A020F0">YES</FONT></B>;
+   	}
+  }
+  <B><FONT COLOR="#A020F0">return</FONT></B> didConnect;
+}
+<I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// Adapter methods, this is where the translation takes place!
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// The methods known by AquaTerm are defined in AQTProtocol.h
+</FONT></I><I><FONT COLOR="#B22222">// and the function calls known to the client are defined in C_API.h
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I>- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">openGraph</FONT></B>:(<FONT COLOR="#228B22"><B>int</FONT></B>)<FONT COLOR="#B8860B">n</FONT>
+{
+  <I><FONT COLOR="#B22222">// 
+</FONT></I>  <I><FONT COLOR="#B22222">// AquaTerm doesn't know openGraph(n), but the point of an openGraph call 
+</FONT></I>  <I><FONT COLOR="#B22222">// corresponds to selecting a &quot;model&quot;. Hence: 
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  [aqtConnection selectModel:n];
+}
+
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">closeGraph</FONT></B>
+{
+  <I><FONT COLOR="#B22222">// 
+</FONT></I>  <I><FONT COLOR="#B22222">// AquaTerm doesn't know closeGraph, but the at this point 
+</FONT></I>  <I><FONT COLOR="#B22222">// it should draw (render) the currently selected model. Hence: 
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  [aqtConnection renderInViewShouldRelease:<B><FONT COLOR="#A020F0">YES</FONT></B>];
+}
+
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">lineFromPoint</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">startpoint</FONT> <B><FONT COLOR="#0000FF">toPoint</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">endpoint</FONT>
+{
+  <I><FONT COLOR="#B22222">// 
+</FONT></I>  <I><FONT COLOR="#B22222">// AquaTerm works with bezier paths of arbitrary complexity, 
+</FONT></I>  <I><FONT COLOR="#B22222">// but the client only knows how to draw straight lines. 
+</FONT></I>  <I><FONT COLOR="#B22222">// Also, the client doesnt know the concept of color so we set the
+</FONT></I>  <I><FONT COLOR="#B22222">// linecolor to a fix value. Hence: 
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  NSBezierPath *thePath = [NSBezierPath bezierPath];
+  [thePath moveToPoint:startpoint];  
+  [thePath lineToPoint:endpoint];
+  [aqtConnection addPolyline:thePath withIndexedColor:0];
+}
+
+- (<FONT COLOR="#228B22"><B>void</FONT></B>)<B><FONT COLOR="#0000FF">putText</FONT></B>:(<FONT COLOR="#228B22"><B>const char *</FONT></B>)<FONT COLOR="#B8860B">str</FONT> <B><FONT COLOR="#0000FF">at</FONT></B>:(<FONT COLOR="#228B22"><B>NSPoint</FONT></B>)<FONT COLOR="#B8860B">point</FONT>
+{
+  <I><FONT COLOR="#B22222">// 
+</FONT></I>  <I><FONT COLOR="#B22222">// Put a line of beautifully rendered Times Roman (AquaTerm default)
+</FONT></I>  <I><FONT COLOR="#B22222">// at the point (x,y), left justified and horisontally (angle 0.0).
+</FONT></I>  <I><FONT COLOR="#B22222">// Also, the client doesnt know the concept of color so we set the
+</FONT></I>  <I><FONT COLOR="#B22222">// linecolor to a fix value. Hence: 
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>    [aqtConnection addString:[NSString stringWithCString:str]
+              atPoint:point
+    withJustification:0
+              atAngle:0.0
+     withIndexedColor:1];
+}
+@<B><FONT COLOR="#A020F0">end</FONT></B> <I><FONT COLOR="#B22222">/* AQTAdapter */</FONT></I>
+<I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">// --- C API example
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I><FONT COLOR="#228B22"><B>void</FONT></B> <B><FONT COLOR="#0000FF">openGraph</FONT></B>(<FONT COLOR="#228B22"><B>int</FONT></B> n)
+{
+  <I><FONT COLOR="#B22222">// Housekeeping
+</FONT></I>  <I><FONT COLOR="#B22222">// The autorelease pool and the adapter object must be initialized,
+</FONT></I>  <I><FONT COLOR="#B22222">// this is the place to do it. But only once!
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  <B><FONT COLOR="#A020F0">if</FONT></B> (arpool == NULL)   <I><FONT COLOR="#B22222">/* Make sure we don't leak mem by allocating every time */</FONT></I>
+  {
+    arpool = [[NSAutoreleasePool alloc] init]; 
+    adapter = [[AQTAdapter alloc] init]; 
+  }
+  <I><FONT COLOR="#B22222">// 
+</FONT></I>  <I><FONT COLOR="#B22222">// Now, we know the connection is up (unless there was an error...)
+</FONT></I>  <I><FONT COLOR="#B22222">//
+</FONT></I>  [adapter openGraph:n];
+}
+
+<FONT COLOR="#228B22"><B>void</FONT></B> <B><FONT COLOR="#0000FF">closeGraph</FONT></B>(<FONT COLOR="#228B22"><B>void</FONT></B>)
+{
+	[adapter closeGraph];
+}
+
+<FONT COLOR="#228B22"><B>void</FONT></B> <B><FONT COLOR="#0000FF">line</FONT></B>(<FONT COLOR="#228B22"><B>int</FONT></B> x1, <FONT COLOR="#228B22"><B>int</FONT></B> y1, <FONT COLOR="#228B22"><B>int</FONT></B> x2, <FONT COLOR="#228B22"><B>int</FONT></B> y2)
+{
+  [adapter lineFromPoint:NSMakePoint(x1, y1) toPoint:NSMakePoint(x2, y2)];
+}
+
+<FONT COLOR="#228B22"><B>void</FONT></B> <B><FONT COLOR="#0000FF">putText</FONT></B>(<FONT COLOR="#228B22"><B>int</FONT></B> x, <FONT COLOR="#228B22"><B>int</FONT></B> y, <FONT COLOR="#228B22"><B>const</FONT></B> <FONT COLOR="#228B22"><B>char</FONT></B> *str)
+{
+  [adapter putText:str at:NSMakePoint(x, y)];
+}
+<I><FONT COLOR="#B22222">//
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">// --- End of C API example
+</FONT></I><I><FONT COLOR="#B22222">// ----------------------------------------------------------------
+</FONT></I><I><FONT COLOR="#B22222">//
+</FONT></I>
+
+
+
+</PRE>
+<HR>
+<ADDRESS>Generated by <A HREF="http://www.iki.fi/~mtr/genscript/">GNU enscript 1.6.1</A>.</ADDRESS>
+</BODY>
+</HTML>
