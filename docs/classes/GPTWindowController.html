@@ -25,7 +25,9 @@
 GPTWindowController is a subclass of NSWindowController 
 that controls an AquaTerm window. Every instance of a 
 GPTWindowController holds a reference to the rendering 
-GPTView and to the GPTModel received from gnuplot.
+AQTView. GPTWindowController assists in setting the model 
+for the view by assuring that the window nib is loaded before 
+the model received from the AQTBuilder object is handed to the view.
 
 
 
@@ -48,16 +50,13 @@ GPTView and to the GPTModel received from gnuplot.
 	<blockquote>
 	
 		<CODE>IBOutlet id <B>viewOutlet</B>;</CODE><BR>
-		<CODE>AQTModel *<B>model</B>;</CODE><BR>
-		<CODE>NSString *<B>viewTitle</B>;</CODE><BR>
+		<CODE>AQTModel *<B>tempModel</B>;</CODE><BR>
 		<CODE>int <B>viewIndex</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>viewOutlet</TD><TD>Points to the rendering view</TD></TR>
 	
-		<TR><TD>model</TD><TD>Holds the model for the view</TD></TR>
-	
-		<TR><TD>viewTitle</TD><TD>The title of the model from gnuplot's set term aqua &lt;n&gt; title command</TD></TR>
+		<TR><TD>tempModel</TD><TD>Holds the model for the view</TD></TR>
 	
 		<TR><TD>viewIndex</TD><TD>The number by which the client refers to the model</TD></TR>
 	
@@ -74,8 +73,6 @@ GPTView and to the GPTModel received from gnuplot.
 		
 		<DL><DT></DT>
 		
-			<DD> <A HREF="#- initWithIndex:andTitle:">- initWithIndex:andTitle:</A></DD>
-		
 			<DD> <A HREF="#- initWithIndex:">- initWithIndex:</A></DD>
 		
 			<DD> <A HREF="#- viewOutlet">- viewOutlet</A></DD>
@@ -83,8 +80,6 @@ GPTView and to the GPTModel received from gnuplot.
 			<DD> <A HREF="#- viewIndex">- viewIndex</A></DD>
 		
 			<DD> <A HREF="#- setModel:">- setModel:</A></DD>
-		
-			<DD> <A HREF="#- model">- model</A></DD>
 		
 		</DL>
 	
@@ -104,21 +99,7 @@ GPTView and to the GPTModel received from gnuplot.
 		<CODE>- (id)<B>initWithIndex:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
-		The title is optional and this init, controls the default title 
-which is Figure &lt;<I>index</I>&gt;
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- initWithIndex:andTitle:"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/initWithIndex:andTitle:">initWithIndex:andTitle:</A></H3><P>
-		<CODE>- (id)<B>initWithIndex:</B>(int)<EM>index</EM> <B>andTitle:</B>(NSString *)<EM>title</EM>
-			
-		</CODE><P>
 		The designated initializer
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- model"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/model">model</A></H3><P>
-		<CODE>- (AQTModel *)<B>model</B>
-		</CODE><P>
-		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setModel:"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/setModel:">setModel:</A></H3><P>
@@ -137,13 +118,13 @@ which is Figure &lt;<I>index</I>&gt;
 		<A NAME="- viewOutlet"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/viewOutlet">viewOutlet</A></H3><P>
 		<CODE>- (id)<B>viewOutlet</B>
 		</CODE><P>
-		Accessor methods for the GPTView instance
+		Accessor methods for the AQTView instance
 	
 
 
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Thu Apr 25 11:15:37 2002
 <P>
 </BODY></HTML>

@@ -76,6 +76,8 @@ The methods belong to three distinct groups, methods that i) change open/closed 
 		
 			<DD> <A HREF="#- getAquaTermInfo">- getAquaTermInfo</A></DD>
 		
+			<DD> <A HREF="#- setTitle:">- setTitle:</A></DD>
+		
 			<DD> <A HREF="#- setFontWithName:size:">- setFontWithName:size:</A></DD>
 		
 			<DD> <A HREF="#- setColor:forIndex:">- setColor:forIndex:</A></DD>
@@ -97,11 +99,9 @@ The methods belong to three distinct groups, methods that i) change open/closed 
 		
 			<DD> <A HREF="#- addPolygon:withRGBColor:">- addPolygon:withRGBColor:</A></DD>
 		
-			<DD> <A HREF="#- addBitmap:bounds:">- addBitmap:bounds:</A></DD>
+			<DD> <A HREF="#- addBitmap:size:bounds:">- addBitmap:size:bounds:</A></DD>
 		
-			<DD> <A HREF="#- addImage:bounds:">- addImage:bounds:</A></DD>
-		
-			<DD> <A HREF="#- addImageFromFile:">- addImageFromFile:</A></DD>
+			<DD> <A HREF="#- addImageFromFile:bounds:">- addImageFromFile:bounds:</A></DD>
 		
 			<DD> <A HREF="#- render">- render</A></DD>
 		
@@ -138,26 +138,18 @@ For the addPolyline:withColor: and addPolygon:withColor: methods this will unfor
  
 	
 		
-		<A NAME="- addBitmap:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addBitmap:bounds:">addBitmap:bounds:</A></H3><P>
-		<CODE>- (oneway void)<B>addBitmap:</B>(bycopy NSData *)<EM>imageData</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
+		<A NAME="- addBitmap:size:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addBitmap:size:bounds:">addBitmap:size:bounds:</A></H3><P>
+		<CODE>- (oneway void)<B>addBitmap:</B>(bycopy NSData *)<EM>imageData</EM> <B>size:</B>(NSSize)<EM>theSize</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
 			
 		</CODE><P>
-		Add a raw bitmap (unsigned char) with each byte corresponding to an entry in the indexed colormap
+		Add a bitmap (TIFFRepresentation)
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- addImage:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addImage:bounds:">addImage:bounds:</A></H3><P>
-		<CODE>- (oneway void)<B>addImage:</B>(bycopy NSData *)<EM>imageData</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
+		<A NAME="- addImageFromFile:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addImageFromFile:bounds:">addImageFromFile:bounds:</A></H3><P>
+		<CODE>- (oneway void)<B>addImageFromFile:</B>(bycopy NSString *)<EM>filename</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
 			
 		</CODE><P>
-		Add an image. The <I>imageData</I> must be such that an NSImage can be created from: 
-NSImage *anImage = [[NSImage alloc] initWithData:<I>imageData</I>]
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- addImageFromFile:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addImageFromFile:">addImageFromFile:</A></H3><P>
-		<CODE>- (oneway void)<B>addImageFromFile:</B>(bycopy NSString *)<EM>filename</EM>
-			
-		</CODE><P>
-		Add an image from file, given a valid <I>filename</I>. (TIFF, jpg, etc.)
+		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addPolygon:withColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withColor:">addPolygon:withColor:</A></H3><P>
@@ -312,7 +304,7 @@ drawing to the same model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setColor:forIndex:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/setColor:forIndex:">setColor:forIndex:</A></H3><P>
-		<CODE>- (oneway void)<B>setColor:</B>(NSColor *)<EM>aColor</EM> <B>forIndex:</B>(int)<EM>colorIndex</EM>
+		<CODE>- (oneway void)<B>setColor:</B>(bycopy NSColor *)<EM>aColor</EM> <B>forIndex:</B>(int)<EM>colorIndex</EM>
 			
 		</CODE><P>
 		Set the NSColor for a particular entry in the colormap.
@@ -325,11 +317,18 @@ drawing to the same model
 		Set the font for the subsequent strings added to the model 
 (mimics fontWithName: size: method in NSFont)
 	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setTitle:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/setTitle:">setTitle:</A></H3><P>
+		<CODE>- (oneway void)<B>setTitle:</B>(bycopy NSString *)<EM>newTitle</EM>
+			
+		</CODE><P>
+		Set the title for the current model, defaults to 'Figure n'.
+	
 
 
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Thu Apr 25 11:15:37 2002
 <P>
 </BODY></HTML>

@@ -48,11 +48,17 @@ collection itself (not exploited at present).
 	
 		<CODE>NSMutableArray *<B>modelObjects</B>;</CODE><BR>
 		<CODE>AQTColorMap *<B>modelColorMap</B>;</CODE><BR>
+		<CODE>NSString *<B>title</B>;</CODE><BR>
+		<CODE>double <B>timeTaken</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>modelObjects</TD><TD>An array of GPTGraphic objects (leaf or collection)</TD></TR>
 	
 		<TR><TD>modelColorMap</TD><TD>A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model)</TD></TR>
+	
+		<TR><TD>title</TD><TD>Associate a title with the model. Default is 'Figure n'.</TD></TR>
+	
+		<TR><TD>timeTaken</TD><TD>No description.</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -81,6 +87,16 @@ collection itself (not exploited at present).
 		
 			<DD> <A HREF="#- setColormap:">- setColormap:</A></DD>
 		
+			<DD> <A HREF="#- colormap">- colormap</A></DD>
+		
+			<DD> <A HREF="#- setTitle:">- setTitle:</A></DD>
+		
+			<DD> <A HREF="#- title">- title</A></DD>
+		
+			<DD> <A HREF="#- timeTaken">- timeTaken</A></DD>
+		
+			<DD> <A HREF="#- setTimeTaken:">- setTimeTaken:</A></DD>
+		
 		</DL>
 	
 	</blockquote>
@@ -100,6 +116,12 @@ collection itself (not exploited at present).
 			
 		</CODE><P>
 		Add any subclass of AQTGraphic to the collection of objects.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- colormap"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/colormap">colormap</A></H3><P>
+		<CODE>- (AQTColorMap *)<B>colormap</B>
+		</CODE><P>
+		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- count"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/count">count</A></H3><P>
@@ -141,11 +163,37 @@ collection itself (not exploited at present).
 		</CODE><P>
 		No method description.
 	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setTimeTaken:"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/setTimeTaken:">setTimeTaken:</A></H3><P>
+		<CODE>- (void)<B>setTimeTaken:</B>(double)<EM>timer</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setTitle:"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/setTitle:">setTitle:</A></H3><P>
+		<CODE>- (void)<B>setTitle:</B>(NSString *)<EM>newTitle</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- timeTaken"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/timeTaken">timeTaken</A></H3><P>
+		<CODE>- (double)<B>timeTaken</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- title"></A><H3><A NAME="//apple_ref/occ/instm/AQTModel/title">title</A></H3><P>
+		<CODE>- (NSString *)<B>title</B>
+		</CODE><P>
+		No method description.
+	
 
 
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Thu Apr 25 11:15:36 2002
 <P>
 </BODY></HTML>

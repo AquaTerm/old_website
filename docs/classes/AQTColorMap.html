@@ -66,6 +66,10 @@ No class description.
 		
 			<DD> <A HREF="#- colorForIndex:">- colorForIndex:</A></DD>
 		
+			<DD> <A HREF="#- colorList">- colorList</A></DD>
+		
+			<DD> <A HREF="#- setColorList:">- setColorList:</A></DD>
+		
 		</DL>
 	
 	</blockquote>
@@ -84,13 +88,26 @@ No class description.
 		<CODE>- (NSColor *)<B>colorForIndex:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
-		AquaTerm uses is a color <I>index</I> to map to a set of 
+		AquaTerm uses a color <I>index</I> to map to a set of 
 colors. 
 Negative numbers have special meanings (-4 = background, -2 = axes, -1 = grid).
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- colorList"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/colorList">colorList</A></H3><P>
+		<CODE>- (NSArray *)<B>colorList</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setColor:forIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/setColor:forIndex:">setColor:forIndex:</A></H3><P>
 		<CODE>- (void)<B>setColor:</B>(NSColor *)<EM>newColor</EM> <B>forIndex:</B>(int)<EM>index</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setColorList:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/setColorList:">setColorList:</A></H3><P>
+		<CODE>- (void)<B>setColorList:</B>(NSArray *)<EM>colorList</EM>
 			
 		</CODE><P>
 		No method description.
@@ -100,6 +117,6 @@ Negative numbers have special meanings (-4 = background, -2 = axes, -1 = grid).
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Thu Apr 25 11:15:36 2002
 <P>
 </BODY></HTML>

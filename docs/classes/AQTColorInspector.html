@@ -55,15 +55,20 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		<CODE>IBOutlet NSColorWell *<B>lineColor6</B>;</CODE><BR>
 		<CODE>IBOutlet NSColorWell *<B>lineColor7</B>;</CODE><BR>
 		<CODE>IBOutlet NSColorWell *<B>lineColor8</B>;</CODE><BR>
-		<CODE>IBOutlet NSColorWell *<B>lineColor9</B>;</CODE><BR>
-		<CODE>IBOutlet NSColorWell *<B>maxColor</B>;</CODE><BR>
-		<CODE>IBOutlet NSColorWell *<B>minColor</B>;</CODE><BR>
-		<CODE>IBOutlet NSImageView *<B>surfaceRampImage</B>;</CODE><BR>
-		<CODE>IBOutlet NSColorWell *<B>textColor</B>;</CODE><BR>
-		<CODE>GPTWindowController *<B>frontWindowController</B>;</CODE><BR>
-		<CODE>NSImage *<B>rampImage</B>;</CODE><BR>
-		<CODE>NSBitmapImageRep *<B>bitmap</B>;</CODE><BR>
-		<CODE>unsigned char *<B>planes</B>[3];</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color1Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color2Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color3Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color4Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color5Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color6Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color7Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>color8Label</B>;</CODE><BR>
+		<CODE>IBOutlet NSPopUpButton *<B>rangePopUp</B>;</CODE><BR>
+		<CODE>int <B>cRange</B>;</CODE><BR>
+		<CODE>int <B>colorCount</B>;</CODE><BR>
+		<CODE>IBOutlet NSTextField *<B>infoText</B>;</CODE><BR>
+		<CODE>AQTView *<B>currentView</B>;</CODE><BR>
+		<CODE>AQTColorMap *<B>localColormap</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>axisColor</TD><TD>color for x,y[,z] axes, tickmarks and labels</TD></TR>
@@ -88,23 +93,33 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 	
 		<TR><TD>lineColor8</TD><TD>indexed color 8</TD></TR>
 	
-		<TR><TD>lineColor9</TD><TD>indexed color 9</TD></TR>
+		<TR><TD>color1Label</TD><TD>indexed color 1</TD></TR>
 	
-		<TR><TD>maxColor</TD><TD>gradient max color</TD></TR>
+		<TR><TD>color2Label</TD><TD>indexed color 2</TD></TR>
 	
-		<TR><TD>minColor</TD><TD>gradient min color</TD></TR>
+		<TR><TD>color3Label</TD><TD>indexed color 3</TD></TR>
 	
-		<TR><TD>surfaceRampImage</TD><TD>shows the gradient to the user</TD></TR>
+		<TR><TD>color4Label</TD><TD>indexed color 4</TD></TR>
 	
-		<TR><TD>textColor</TD><TD>Not implemented, see axisColor</TD></TR>
+		<TR><TD>color5Label</TD><TD>indexed color 5</TD></TR>
 	
-		<TR><TD>frontWindowController</TD><TD>Keeps track of the windowController of the front window</TD></TR>
+		<TR><TD>color6Label</TD><TD>indexed color 6</TD></TR>
 	
-		<TR><TD>rampImage</TD><TD>Preview of the continuos colormap (&quot;coloraxis&quot;)</TD></TR>
+		<TR><TD>color7Label</TD><TD>indexed color 7</TD></TR>
 	
-		<TR><TD>bitmap</TD><TD>the raw bitmap that used in rampImage</TD></TR>
+		<TR><TD>color8Label</TD><TD>indexed color 8</TD></TR>
 	
-		<TR><TD>planes</TD><TD>the R, G and B planes for the raw bitmap (each is 1x64 pixels)</TD></TR>
+		<TR><TD>rangePopUp</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>cRange</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>colorCount</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>infoText</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>currentView</TD><TD>Keeps track of the AQTView of the front window</TD></TR>
+	
+		<TR><TD>localColormap</TD><TD>No description.</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -121,9 +136,9 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		
 		<DL><DT></DT>
 		
-			<DD> <A HREF="#- setFrontWindowController:">- setFrontWindowController:</A></DD>
+			<DD> <A HREF="#- setMainWindow:">- setMainWindow:</A></DD>
 		
-			<DD> <A HREF="#- frontWindowController">- frontWindowController</A></DD>
+			<DD> <A HREF="#- setColormap:">- setColormap:</A></DD>
 		
 		</DL>
 	
@@ -134,9 +149,7 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		
 			<DD> <A HREF="#- applyPressed:">- applyPressed:</A></DD>
 		
-			<DD> <A HREF="#- didSetMinColor:">- didSetMinColor:</A></DD>
-		
-			<DD> <A HREF="#- didSetMaxColor:">- didSetMaxColor:</A></DD>
+			<DD> <A HREF="#- didSelectRange:">- didSelectRange:</A></DD>
 		
 		</DL>
 	
@@ -145,9 +158,15 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		
 		<DL><DT></DT>
 		
-			<DD> <A HREF="#- updateRampImage">- updateRampImage</A></DD>
+			<DD> <A HREF="#- updatePopUp">- updatePopUp</A></DD>
 		
 			<DD> <A HREF="#- mainWindowChanged:">- mainWindowChanged:</A></DD>
+		
+			<DD> <A HREF="#- mainWindowResigned:">- mainWindowResigned:</A></DD>
+		
+			<DD> <A HREF="#- updateVisibleState">- updateVisibleState</A></DD>
+		
+			<DD> <A HREF="#- updateColormap">- updateColormap</A></DD>
 		
 		</DL>
 	
@@ -170,22 +189,9 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		create new AQTColorMap from the current settings, and update the active AQTModel
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- didSetMaxColor:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/didSetMaxColor:">didSetMaxColor:</A></H3><P>
-		<CODE>- (IBAction)<B>didSetMaxColor:</B>(id)<EM>sender</EM>
+		<A NAME="- didSelectRange:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/didSelectRange:">didSelectRange:</A></H3><P>
+		<CODE>- (IBAction)<B>didSelectRange:</B>(id)<EM>sender</EM>
 			
-		</CODE><P>
-		No method description.
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- didSetMinColor:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/didSetMinColor:">didSetMinColor:</A></H3><P>
-		<CODE>- (IBAction)<B>didSetMinColor:</B>(id)<EM>sender</EM>
-			
-		</CODE><P>
-		No method description.
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- frontWindowController"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/frontWindowController">frontWindowController</A></H3><P>
-		<CODE>- (GPTWindowController *)<B>frontWindowController</B>
 		</CODE><P>
 		No method description.
 	
@@ -197,23 +203,49 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- setFrontWindowController:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/setFrontWindowController:">setFrontWindowController:</A></H3><P>
-		<CODE>- (void)<B>setFrontWindowController:</B>(GPTWindowController *)<EM>newWindowController</EM>
+		<A NAME="- mainWindowResigned:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/mainWindowResigned:">mainWindowResigned:</A></H3><P>
+		<CODE>- (void)<B>mainWindowResigned:</B>(NSNotification *)<EM>notification</EM>
 			
 		</CODE><P>
 		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- updateRampImage"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/updateRampImage">updateRampImage</A></H3><P>
-		<CODE>- (void)<B>updateRampImage</B>
+		<A NAME="- setColormap:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/setColormap:">setColormap:</A></H3><P>
+		<CODE>- (void)<B>setColormap:</B>(AQTColorMap *)<EM>newColormap</EM>
+			
 		</CODE><P>
-		display the current gradient in the inspector
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setMainWindow:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/setMainWindow:">setMainWindow:</A></H3><P>
+		<CODE>- (void)<B>setMainWindow:</B>(NSWindow *)<EM>mainWindow</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- updateColormap"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/updateColormap">updateColormap</A></H3><P>
+		<CODE>- (void)<B>updateColormap</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- updatePopUp"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/updatePopUp">updatePopUp</A></H3><P>
+		<CODE>- (void)<B>updatePopUp</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- updateVisibleState"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/updateVisibleState">updateVisibleState</A></H3><P>
+		<CODE>- (void)<B>updateVisibleState</B>
+		</CODE><P>
+		No method description.
 	
 
 
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Thu Apr 25 11:15:36 2002
 <P>
 </BODY></HTML>
