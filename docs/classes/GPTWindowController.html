@@ -59,7 +59,7 @@ GPTView and to the GPTModel received from gnuplot.
 	
 		<TR><TD>viewTitle</TD><TD>The title of the model from gnuplot's set term aqua &lt;n&gt; title command</TD></TR>
 	
-		<TR><TD>viewIndex</TD><TD>The number by which gnuplot refers to the model</TD></TR>
+		<TR><TD>viewIndex</TD><TD>The number by which the client refers to the model</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -101,7 +101,7 @@ GPTView and to the GPTModel received from gnuplot.
 	
 		
 		<A NAME="- initWithIndex:"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/initWithIndex:">initWithIndex:</A></H3><P>
-		<CODE>- (id)<B>initWithIndex:</B>(unsigned)<EM>index</EM>
+		<CODE>- (id)<B>initWithIndex:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
 		The title is optional and this init, controls the default title 
@@ -109,7 +109,7 @@ which is Figure &lt;<I>index</I>&gt;
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- initWithIndex:andTitle:"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/initWithIndex:andTitle:">initWithIndex:andTitle:</A></H3><P>
-		<CODE>- (id)<B>initWithIndex:</B>(unsigned)<EM>index</EM> <B>andTitle:</B>(NSString *)<EM>title</EM>
+		<CODE>- (id)<B>initWithIndex:</B>(int)<EM>index</EM> <B>andTitle:</B>(NSString *)<EM>title</EM>
 			
 		</CODE><P>
 		The designated initializer
@@ -129,7 +129,7 @@ which is Figure &lt;<I>index</I>&gt;
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- viewIndex"></A><H3><A NAME="//apple_ref/occ/instm/GPTWindowController/viewIndex">viewIndex</A></H3><P>
-		<CODE>- (unsigned)<B>viewIndex</B>
+		<CODE>- (int)<B>viewIndex</B>
 		</CODE><P>
 		No method description.
 	
@@ -144,6 +144,6 @@ which is Figure &lt;<I>index</I>&gt;
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
 <P>
 </BODY></HTML>

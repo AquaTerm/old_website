@@ -45,15 +45,16 @@ action and manages the DO connection object.
 	<H2>Instance Variables</H2>
 	<blockquote>
 	
-		<CODE>GPTReceiverObject *<B>receiverObject</B>;</CODE><BR>
+		<CODE>AQTBuilder *<B>builder</B>;</CODE><BR>
 		<CODE>NSMutableArray *<B>gptWindowControllers</B>;</CODE><BR>
 		<CODE>NSWindow *<B>frontWindow</B>;</CODE><BR>
 		<CODE>NSPopUpButton *<B>saveFormatPopup</B>;</CODE><BR>
 		<CODE>NSBox *<B>extendSavePanelView</B>;</CODE><BR>
 		<CODE>AQTColorInspector *<B>inspector</B>;</CODE><BR>
+		<CODE>NSConnection *<B>doConnection</B>;</CODE><BR>
 	<P><TABLE>
 	
-		<TR><TD>receiverObject</TD><TD>DO connection handler</TD></TR>
+		<TR><TD>builder</TD><TD>Implements AQTProtocol methods</TD></TR>
 	
 		<TR><TD>gptWindowControllers</TD><TD>Array of windowcontrollers</TD></TR>
 	
@@ -64,6 +65,8 @@ action and manages the DO connection object.
 		<TR><TD>extendSavePanelView</TD><TD>No description.</TD></TR>
 	
 		<TR><TD>inspector</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>doConnection</TD><TD>No description.</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -117,13 +120,16 @@ action and manages the DO connection object.
 		<A NAME="- awakeFromNib"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/awakeFromNib">awakeFromNib</A></H3><P>
 		<CODE>- (void)<B>awakeFromNib</B>
 		</CODE><P>
-		When the NIB file is loaded, the controller adds itself to 
+		When the NIB file is loaded, the controller vends an object of class AQTBuilder 
+via the distributed objects system and also adds itself to 
 the list of observers for NSWindowDidBecomeMainNotification 
-to keep track of the model to render when the user print.
+to keep track of the model to render when the user print.<P>
+
+The name of the DO connection registered is 'aquatermServer'.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- controllerForView:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/controllerForView:">controllerForView:</A></H3><P>
-		<CODE>- (GPTWindowController *)<B>controllerForView:</B>(unsigned)<EM>index</EM>
+		<CODE>- (GPTWindowController *)<B>controllerForView:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
 		Returns the windowController for terminal &lt;n&gt; or <B>nil</B> if 
@@ -186,7 +192,7 @@ corresponding to the main window.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setModel:forView:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/setModel:forView:">setModel:forView:</A></H3><P>
-		<CODE>- (void)<B>setModel:</B>(AQTModel *)<EM>gptModel</EM> <B>forView:</B>(unsigned)<EM>index</EM>
+		<CODE>- (void)<B>setModel:</B>(AQTModel *)<EM>gptModel</EM> <B>forView:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
 		When the controller receives a model from the sender (e.g. gnuplot) 
@@ -199,6 +205,6 @@ If a windowController for terminal &lt;n&gt; doesn't exist, it is created.
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
 <P>
 </BODY></HTML>

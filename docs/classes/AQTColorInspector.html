@@ -60,7 +60,7 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		<CODE>IBOutlet NSColorWell *<B>minColor</B>;</CODE><BR>
 		<CODE>IBOutlet NSImageView *<B>surfaceRampImage</B>;</CODE><BR>
 		<CODE>IBOutlet NSColorWell *<B>textColor</B>;</CODE><BR>
-		<CODE>id <B>theController</B>;</CODE><BR>
+		<CODE>GPTWindowController *<B>frontWindowController</B>;</CODE><BR>
 		<CODE>NSImage *<B>rampImage</B>;</CODE><BR>
 		<CODE>NSBitmapImageRep *<B>bitmap</B>;</CODE><BR>
 		<CODE>unsigned char *<B>planes</B>[3];</CODE><BR>
@@ -98,7 +98,7 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 	
 		<TR><TD>textColor</TD><TD>Not implemented, see axisColor</TD></TR>
 	
-		<TR><TD>theController</TD><TD>sets itself at init</TD></TR>
+		<TR><TD>frontWindowController</TD><TD>Keeps track of the windowController of the front window</TD></TR>
 	
 		<TR><TD>rampImage</TD><TD>Preview of the continuos colormap (&quot;coloraxis&quot;)</TD></TR>
 	
@@ -115,6 +115,17 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 	<P><HR WIDTH=50% ALIGN=LEFT>
 	<H2>Method Types</H2>
 	<blockquote>
+	
+		
+			Accessor methods
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- setFrontWindowController:">- setFrontWindowController:</A></DD>
+		
+			<DD> <A HREF="#- frontWindowController">- frontWindowController</A></DD>
+		
+		</DL>
 	
 		
 			IBActions
@@ -173,8 +184,21 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 		No method description.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- frontWindowController"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/frontWindowController">frontWindowController</A></H3><P>
+		<CODE>- (GPTWindowController *)<B>frontWindowController</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- mainWindowChanged:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/mainWindowChanged:">mainWindowChanged:</A></H3><P>
 		<CODE>- (void)<B>mainWindowChanged:</B>(NSNotification *)<EM>notification</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setFrontWindowController:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/setFrontWindowController:">setFrontWindowController:</A></H3><P>
+		<CODE>- (void)<B>setFrontWindowController:</B>(GPTWindowController *)<EM>newWindowController</EM>
 			
 		</CODE><P>
 		No method description.
@@ -190,6 +214,6 @@ AQTColorInspector is the controller class for the Color Inspector nib.
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
 <P>
 </BODY></HTML>

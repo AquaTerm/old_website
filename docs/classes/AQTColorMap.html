@@ -22,7 +22,7 @@
 
 
 <H2>Class Description</H2>
-Mappings for colors both indexed and gradient for a particular AQTModel.
+No class description.
 
 
 
@@ -44,16 +44,10 @@ Mappings for colors both indexed and gradient for a particular AQTModel.
 	<H2>Instance Variables</H2>
 	<blockquote>
 	
-		<CODE>NSDictionary *<B>indexedColormap</B>;</CODE><BR>
-		<CODE>NSColor *<B>minColor</B>;</CODE><BR>
-		<CODE>NSColor *<B>maxColor</B>;</CODE><BR>
+		<CODE>NSMutableArray *<B>indexedColormap</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>indexedColormap</TD><TD>No description.</TD></TR>
-	
-		<TR><TD>minColor</TD><TD>for continous colormaps</TD></TR>
-	
-		<TR><TD>maxColor</TD><TD>for continous colormaps</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -66,20 +60,9 @@ Mappings for colors both indexed and gradient for a particular AQTModel.
 	<blockquote>
 	
 		
-			Designated initializer
-		
 		<DL><DT></DT>
 		
-			<DD> <A HREF="#- initWithColorDict:rampFrom:to:">- initWithColorDict:rampFrom:to:</A></DD>
-		
-		</DL>
-	
-		
-			accessor methods
-		
-		<DL><DT></DT>
-		
-			<DD> <A HREF="#- colorForFloat:">- colorForFloat:</A></DD>
+			<DD> <A HREF="#- setColor:forIndex:">- setColor:forIndex:</A></DD>
 		
 			<DD> <A HREF="#- colorForIndex:">- colorForIndex:</A></DD>
 		
@@ -97,24 +80,17 @@ Mappings for colors both indexed and gradient for a particular AQTModel.
  
 	
 		
-		<A NAME="- colorForFloat:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/colorForFloat:">colorForFloat:</A></H3><P>
-		<CODE>- (NSColor *)<B>colorForFloat:</B>(float)<EM>grey</EM>
-			
-		</CODE><P>
-		returns a color corresponding to a point on a gradient
-	
-		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- colorForIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/colorForIndex:">colorForIndex:</A></H3><P>
 		<CODE>- (NSColor *)<B>colorForIndex:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
-		Gnuplot uses is a color <I>index</I> to map linestyles to a set of fixed 
-colors. The <I>index</I> is taken modulo max_number_of_colors. 
-Negative numbers have special meanings (-2 = axes, -1 = grid).
+		AquaTerm uses is a color <I>index</I> to map to a set of 
+colors. 
+Negative numbers have special meanings (-4 = background, -2 = axes, -1 = grid).
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
-		<A NAME="- initWithColorDict:rampFrom:to:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/initWithColorDict:rampFrom:to:">initWithColorDict:rampFrom:to:</A></H3><P>
-		<CODE>- (id)<B>initWithColorDict:</B>(NSDictionary *)<EM>indexColors</EM> <B>rampFrom:</B>(NSColor *)<EM>contColorMin</EM> <B>to:</B>(NSColor *)<EM>contColorMax</EM>
+		<A NAME="- setColor:forIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/setColor:forIndex:">setColor:forIndex:</A></H3><P>
+		<CODE>- (void)<B>setColor:</B>(NSColor *)<EM>newColor</EM> <B>forIndex:</B>(int)<EM>index</EM>
 			
 		</CODE><P>
 		No method description.
@@ -124,6 +100,6 @@ Negative numbers have special meanings (-2 = axes, -1 = grid).
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
 <P>
 </BODY></HTML>

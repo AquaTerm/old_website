@@ -18,7 +18,9 @@
 
 
 <H2>Protocol Description</H2>
-No protocol description.
+AQTProtocol describes the methods implemented by the class AQTBuilder and availble to the client via the local (to the client) proxy for an object of class AQTBuilder received via the distributed objects system.<P>
+
+The methods belong to three distinct groups, methods that i) change open/closed state, ii) applies at any time and iii) applies only when there is an open model. Methods with names beginning with 'set' belongs to group (ii) and methods with names beginning with 'add' belongs to group (iii).
 
 
 
@@ -31,7 +33,7 @@ No protocol description.
 		
 		<H4>Synopsis:</H4>
 		
-			<CODE><B><A NAME="//apple_ref/c/econst/AQTProtocolVersion">AQTProtocolVersion</A></B>&nbsp;&nbsp;0.2.0</CODE><BR>
+			<CODE><B><A NAME="//apple_ref/c/econst/AQTProtocolVersion">AQTProtocolVersion</A></B>&nbsp;&nbsp;0.3.0</CODE><BR>
 		
 		
 	
@@ -57,27 +59,70 @@ No protocol description.
 	<blockquote>
 	
 		
+			State-changing methods
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- openModel:">- openModel:</A></DD>
+		
+			<DD> <A HREF="#- closeModel">- closeModel</A></DD>
+		
+		</DL>
+	
+		
+			Methods available in both open and closed state
+		
 		<DL><DT></DT>
 		
 			<DD> <A HREF="#- getAquaTermInfo">- getAquaTermInfo</A></DD>
 		
-			<DD> <A HREF="#- renderInViewShouldRelease:">- renderInViewShouldRelease:</A></DD>
+			<DD> <A HREF="#- setFontWithName:size:">- setFontWithName:size:</A></DD>
 		
-			<DD> <A HREF="#- clearRect:">- clearRect:</A></DD>
+			<DD> <A HREF="#- setColor:forIndex:">- setColor:forIndex:</A></DD>
+		
+		</DL>
+	
+		
+			Methods available only in open state
+		
+		<DL><DT></DT>
 		
 			<DD> <A HREF="#- addString:atPoint:withJustification:atAngle:withIndexedColor:">- addString:atPoint:withJustification:atAngle:withIndexedColor:</A></DD>
 		
-			<DD> <A HREF="#- setFontWithName:size:">- setFontWithName:size:</A></DD>
-		
 			<DD> <A HREF="#- addPolyline:withIndexedColor:">- addPolyline:withIndexedColor:</A></DD>
 		
-			<DD> <A HREF="#- addPolyline:withColor:">- addPolyline:withColor:</A></DD>
-		
 			<DD> <A HREF="#- addPolygon:withIndexedColor:">- addPolygon:withIndexedColor:</A></DD>
+		
+			<DD> <A HREF="#- addPolyline:withRGBColor:">- addPolyline:withRGBColor:</A></DD>
+		
+			<DD> <A HREF="#- addPolygon:withRGBColor:">- addPolygon:withRGBColor:</A></DD>
+		
+			<DD> <A HREF="#- addBitmap:bounds:">- addBitmap:bounds:</A></DD>
+		
+			<DD> <A HREF="#- addImage:bounds:">- addImage:bounds:</A></DD>
+		
+			<DD> <A HREF="#- addImageFromFile:">- addImageFromFile:</A></DD>
+		
+			<DD> <A HREF="#- render">- render</A></DD>
+		
+			<DD> <A HREF="#- clearRect:">- clearRect:</A></DD>
+		
+		</DL>
+	
+		
+			The following methods are deprecated as of AQTProtocol version 0.3.0 and will disappear as of AQTProtocol 0.4.0. For the sake of backwards compatibility with the old adapters using them, they are mapped to appropriate methods.<P>
+
+For the addPolyline:withColor: and addPolygon:withColor: methods this will unfortunately lead to a greyscale representation, most notable with the 'pm3d' option in gnuplot. Updating the adapters will resolve the problem.
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- addPolyline:withColor:">- addPolyline:withColor:</A></DD>
 		
 			<DD> <A HREF="#- addPolygon:withColor:">- addPolygon:withColor:</A></DD>
 		
 			<DD> <A HREF="#- selectModel:">- selectModel:</A></DD>
+		
+			<DD> <A HREF="#- renderInViewShouldRelease:">- renderInViewShouldRelease:</A></DD>
 		
 		</DL>
 	
@@ -93,79 +138,198 @@ No protocol description.
  
 	
 		
+		<A NAME="- addBitmap:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addBitmap:bounds:">addBitmap:bounds:</A></H3><P>
+		<CODE>- (oneway void)<B>addBitmap:</B>(bycopy NSData *)<EM>imageData</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
+			
+		</CODE><P>
+		Add a raw bitmap (unsigned char) with each byte corresponding to an entry in the indexed colormap
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addImage:bounds:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addImage:bounds:">addImage:bounds:</A></H3><P>
+		<CODE>- (oneway void)<B>addImage:</B>(bycopy NSData *)<EM>imageData</EM> <B>bounds:</B>(NSRect)<EM>theBounds</EM>
+			
+		</CODE><P>
+		Add an image. The <I>imageData</I> must be such that an NSImage can be created from: 
+NSImage *anImage = [[NSImage alloc] initWithData:<I>imageData</I>]
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addImageFromFile:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addImageFromFile:">addImageFromFile:</A></H3><P>
+		<CODE>- (oneway void)<B>addImageFromFile:</B>(bycopy NSString *)<EM>filename</EM>
+			
+		</CODE><P>
+		Add an image from file, given a valid <I>filename</I>. (TIFF, jpg, etc.)
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addPolygon:withColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withColor:">addPolygon:withColor:</A></H3><P>
 		<CODE>- (oneway void)<B>addPolygon:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withColor:</B>(bycopy float)<EM>color</EM>
 			
 		</CODE><P>
-		No method description.
+		Deprecated. Add a closed, filled bezierpath with greyscale <I>color</I> to the model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addPolygon:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withIndexedColor:">addPolygon:withIndexedColor:</A></H3><P>
 		<CODE>- (oneway void)<B>addPolygon:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
 			
 		</CODE><P>
-		No method description.
+		Add a polygon (filled bezierpath) with color given by the current colormap to the model
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addPolygon:withRGBColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withRGBColor:">addPolygon:withRGBColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolygon:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withRGBColor:</B>(bycopy NSColor *)<EM>color</EM>
+			
+		</CODE><P>
+		Add a polygon (filled bezierpath), with the given <I>color</I>, to the model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addPolyline:withColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolyline:withColor:">addPolyline:withColor:</A></H3><P>
 		<CODE>- (oneway void)<B>addPolyline:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withColor:</B>(bycopy float)<EM>color</EM>
 			
 		</CODE><P>
-		No method description.
+		Deprecated. Add a bezierpath with greyscale <I>color</I> to the model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addPolyline:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolyline:withIndexedColor:">addPolyline:withIndexedColor:</A></H3><P>
 		<CODE>- (oneway void)<B>addPolyline:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
 			
 		</CODE><P>
-		No method description.
+		Add a bezierpath with color given by the current colormap to the model
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addPolyline:withRGBColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolyline:withRGBColor:">addPolyline:withRGBColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolyline:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withRGBColor:</B>(bycopy NSColor *)<EM>color</EM>
+			
+		</CODE><P>
+		Add a bezierpath, with the given <I>color</I>, to the model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- addString:atPoint:withJustification:atAngle:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addString:atPoint:withJustification:atAngle:withIndexedColor:">addString:atPoint:withJustification:atAngle:withIndexedColor:</A></H3><P>
 		<CODE>- (oneway void)<B>addString:</B>(bycopy NSString *)<EM>text</EM> <B>atPoint:</B>(bycopy NSPoint)<EM>point</EM> <B>withJustification:</B>(bycopy int)<EM>justification</EM> <B>atAngle:</B>(bycopy float)<EM>angle</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
 			
 		</CODE><P>
-		No method description.
+		Add a string to the current model, where: 
+<I>justification</I> is 
+<TABLE BORDER="3">
+	<TR><TD><I>justification</I></TD><TD>value</TD></TR>
+
+	<TR><TD>LEFT</TD><TD>0</TD></TR>
+
+	<TR><TD>CENTER</TD><TD>1</TD></TR>
+
+	<TR><TD>RIGHT</TD><TD>2</TD></TR>
+
+</TABLE>
+<I>colorIndex</I> is a number in the range -4 and upwards. 
+Indices 0 and upwards points to an entry in the colormap. 
+The colors -4, ..., -1 have special meanings as follows: 
+<TABLE BORDER="3">
+	<TR><TD><I>colorIndex</I></TD><TD>meaning</TD></TR>
+
+	<TR><TD>-1</TD><TD>Grid color</TD></TR>
+
+	<TR><TD>-2</TD><TD>Axis color</TD></TR>
+
+	<TR><TD>-3</TD><TD>Reserved</TD></TR>
+
+	<TR><TD>-4</TD><TD>Background color</TD></TR>
+
+</TABLE>
+By following the (optional) special indexing scheme above, those colors will be availble to 
+the Inspector window in addition to the foreground colors. 
+Any cyclic color behaviour have to be taken care of in the client adapter.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- clearRect:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/clearRect:">clearRect:</A></H3><P>
 		<CODE>- (oneway void)<B>clearRect:</B>(NSRect)<EM>rect</EM>
 			
 		</CODE><P>
-		No method description.
+		remove all objects found _completely_ contained in <I>rect</I>
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- closeModel"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/closeModel">closeModel</A></H3><P>
+		<CODE>- (oneway void)<B>closeModel</B>
+		</CODE><P>
+		Close the currently open model and hand it over to the renderer. This will cause the graph to be drawn.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- getAquaTermInfo"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/getAquaTermInfo">getAquaTermInfo</A></H3><P>
 		<CODE>- (bycopy NSDictionary *)<B>getAquaTermInfo</B>
 		</CODE><P>
-		No method description.
+		Return a dictionary containing useful information such as 
+version number string for AquaTerm in the form #.#.# 
+corresponding to major_version.minor_version.bugfix_version 
+as well as user settings such as canvas size, default font etc.<P>
+
+The following dictionary keys are valid: 
+<TABLE BORDER="3">
+	<TR><TD>AQTVersion</TD><TD>version number string for AquaTerm in the form #.#.#</TD></TR>
+
+	<TR><TD>AQTXMax</TD><TD>x-size of canvas in points (1/72 inch)</TD></TR>
+
+	<TR><TD>AQTYMax</TD><TD>y-size of canvas in points (1/72 inch)</TD></TR>
+
+	<TR><TD>AQTFontWHRatio</TD><TD>ratio of fontWidth to fontHeight</TD></TR>
+
+	<TR><TD>AQTPixelWHRatio</TD><TD>ratio of pixel with to height on device (always 1.0 for now)</TD></TR>
+
+	<TR><TD>AQTDefaultFontName</TD><TD>default font (Times Roman)</TD></TR>
+
+	<TR><TD>AQTDefaultFontSize</TD><TD>default font size (16p)</TD></TR>
+
+	<TR><TD>AQTFontName</TD><TD>current font</TD></TR>
+
+	<TR><TD>AQTFontSize</TD><TD>current font size</TD></TR>
+</TABLE>
+
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- openModel:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/openModel:">openModel:</A></H3><P>
+		<CODE>- (oneway void)<B>openModel:</B>(int)<EM>newModel</EM>
+			
+		</CODE><P>
+		Create a new model with reference number <I>newModel</I>. It is an error (non-fatal) to call openModel: without first closing a previously opened model.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- render"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/render">render</A></H3><P>
+		<CODE>- (oneway void)<B>render</B>
+		</CODE><P>
+		Render the model _without_ closing it
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- renderInViewShouldRelease:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/renderInViewShouldRelease:">renderInViewShouldRelease:</A></H3><P>
 		<CODE>- (oneway void)<B>renderInViewShouldRelease:</B>(BOOL)<EM>release</EM>
 			
 		</CODE><P>
-		No method description.
+		Deprecated. Render the current model, argument is normally YES unless 
+this is part of a multiplot operation with subsequent 
+drawing to the same model
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- selectModel:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/selectModel:">selectModel:</A></H3><P>
 		<CODE>- (oneway void)<B>selectModel:</B>(int)<EM>currentModel</EM>
 			
 		</CODE><P>
-		No method description.
+		Deprecated. Select the model that will receive subsequent graphic elements
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setColor:forIndex:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/setColor:forIndex:">setColor:forIndex:</A></H3><P>
+		<CODE>- (oneway void)<B>setColor:</B>(NSColor *)<EM>aColor</EM> <B>forIndex:</B>(int)<EM>colorIndex</EM>
+			
+		</CODE><P>
+		Set the NSColor for a particular entry in the colormap.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setFontWithName:size:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/setFontWithName:size:">setFontWithName:size:</A></H3><P>
 		<CODE>- (oneway void)<B>setFontWithName:</B>(bycopy NSString *)<EM>fontName</EM> <B>size:</B>(bycopy float)<EM>fontSize</EM>
 			
 		</CODE><P>
-		No method description.
+		Set the font for the subsequent strings added to the model 
+(mimics fontWithName: size: method in NSFont)
 	
 
 
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002 by AquaTerm.  All Rights Reserved.   Wed Feb 20 20:19:00 2002
 <P>
 </BODY></HTML>
